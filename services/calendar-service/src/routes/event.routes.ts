@@ -1,12 +1,12 @@
 import { Router } from 'express';
-import { createEvent, getEvents } from '../controllers/event.controller';
+import { createEvent, getEvents, updateEvent, deleteEvent } from '../controllers/event.controller';
 import { authenticateJWT } from '../config/auth.middleware';
 
 const router = Router();
 
-router.use(authenticateJWT); // Yêu cầu đăng nhập cho toàn bộ route events
-
-router.post('/', createEvent);
-router.get('/', getEvents);
+router.get('/', authenticateJWT, getEvents);
+router.post('/', authenticateJWT, createEvent);
+router.put('/:id', authenticateJWT, updateEvent);
+router.delete('/:id', authenticateJWT, deleteEvent);
 
 export default router;
