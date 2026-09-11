@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # Database cho Auth Service & Calendar Service
+  postgres:
+    image: postgres:16-alpine
+    container_name: calendar_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: secretpassword
+      POSTGRES_DB: calendar_db
+    ports:
+      - '5433:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # Database cho Notification/Audit/Calendar Log
+  mongo:
+    image: mongo:7.0
+    container_name: calendar_mongo
+    restart: always
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo_data:/data/db
+
+  # Cache & Job Queue (BullMQ) cho Reminder Service
+  redis:
+    image: redis:7-alpine
+    container_name: calendar_redis
+    restart: always
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres_data:
+  mongo_data:
+  redis_data:
